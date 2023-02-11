@@ -1,0 +1,19 @@
+{
+  "name": "serie/cms1.0",
+  "autoload": {
+    "psr-4": {
+      "Engine\\": "engine/",
+      "App\\": "app/",
+      "Admin\\": "admin/",
+      "Content\\": "content/"
+    }
+  },
+  "authors": [
+    {
+      "name": "y"
+    }
+  ],
+  "require": {
+    "ext-pdo": "*"
+  }
+}
