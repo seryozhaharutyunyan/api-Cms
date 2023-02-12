@@ -44,8 +44,12 @@ class Cms
                 $controller = '\\Engine\\' . $class;
             }
             $parameters = $routerDispatch->get_parameters();
+            $Controller=new $controller($this->di);
+            if(!empty($_GET)){
+                $Controller->setGetParams($_GET);
+            }
 
-            \call_user_func_array([new $controller($this->di), $action], $parameters);
+            \call_user_func_array([$Controller, $action], $parameters);
         } catch (\Exception $e) {
             echo $e->getMessage();
             exit();

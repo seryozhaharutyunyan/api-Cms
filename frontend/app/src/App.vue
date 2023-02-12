@@ -7,7 +7,7 @@ export default {
   methods: {
     query() {
 
-      this.axios.delete('http://api-Cms/aaa')
+      this.axios.get('http://api-Cms')
           .then(resolve => {
             console.log(resolve);
           })

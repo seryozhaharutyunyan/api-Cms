@@ -41,6 +41,9 @@ class Response
         $this->headers[$key] = $value;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function send(int $status = 200, string $message = '', bool $RESPOND_WITH_REQUEST = false): void
     {
         ob_clean();
@@ -49,6 +52,12 @@ class Response
         $method = $this->getMethod($rout);
 
         $request = new \stdClass();
+
+        if($method!==$_SERVER['REQUEST_METHOD']){
+            http_response_code(405);
+            $request=$this->error($request, "The method is wrong. It should be $method");
+            echo json_encode($request);
+        }
         if($status>=200 && $status<300){
             $request=$this->success($request, $message);
         }
@@ -62,8 +71,8 @@ class Response
 
         http_response_code($status);
 
-        $this->setHeader("Access-Control-Allow-Method", $method);
-        header("Access-Control-Allow-Origin: " . Config::item('host', 'cors'));
+        $this->setHeader("Access-Control-Allow-Methods", $method);
+        $this->setHeader("Access-Control-Allow-Origin", Config::item('host', 'cors'));
 
         $this->headersInit();
 

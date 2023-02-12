@@ -13,6 +13,7 @@ use Engine\DI\DI;
 abstract class Controller
 {
     protected DI $di;
+    protected mixed $get=[];
     protected Connection $db;
     protected array $config;
     protected Request $request;
@@ -44,6 +45,22 @@ abstract class Controller
     public function __get(string $key)
     {
         return $this->di->get($key);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGetParams(): mixed
+    {
+        return $this->get;
+    }
+
+    /**
+     * @param mixed $get
+     */
+    public function setGetParams(mixed $get): void
+    {
+        $this->get = $get;
     }
 
     protected function rout($key)
