@@ -16,7 +16,6 @@ abstract class Controller
     protected mixed $get=[];
     protected Connection $db;
     protected array $config;
-    protected Request $request;
     protected QueryBuilder $query;
     protected Load $load;
     protected Response $response;
@@ -29,7 +28,6 @@ abstract class Controller
         $this->di = $di;
         $this->db = $this->di->get('db');
         $this->config = $this->di->get('config');
-        $this->request = $this->di->get('request');
         $this->load = $this->di->get('load');
         $this->response = $this->di->get('response');
 

@@ -4,6 +4,9 @@ namespace App\Controller;
 
 class ApiController extends Controller
 {
+    /**
+     * @throws \Exception
+     */
     public function index(){
 
         $this->response->setData(['aa'=>111])->send(200);

@@ -41,7 +41,12 @@ class Response
         $this->headers[$key] = $value;
     }
 
+
     /**
+     * @param int $status
+     * @param string $message
+     * @param bool $RESPOND_WITH_REQUEST
+     * @return void
      * @throws \Exception
      */
     public function send(int $status = 200, string $message = '', bool $RESPOND_WITH_REQUEST = false): void
