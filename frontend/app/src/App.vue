@@ -1,15 +1,33 @@
 <template>
-  <div>111</div>
+  <div>
+    <input type="number" v-model.trim="name">
+    <input type="date" v-model.trim="date">
+    <button @click="query()">add</button>
+  </div>
 </template>
 <script>
 export default {
   name: 'App',
+  data(){
+    return {
+      name:'',
+      date:'',
+    };
+  },
   methods: {
     query() {
 
-      this.axios.get('http://api-Cms')
+      const formData=new FormData();
+
+      formData.append('name', this.name)
+      formData.append('date', this.date)
+      formData.append('theme', 'sdbfhs')
+
+      this.axios.put('http://api-Cms', {
+        name:this.name
+      })
           .then(resolve => {
-            console.log(resolve);
+            console.log(resolve.data);
           })
           .catch(error => {
             console.log(error);
@@ -18,7 +36,6 @@ export default {
   },
 
   created() {
-    this.query();
   }
 }
 </script>

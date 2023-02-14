@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Request\Home\StoreRequest;
+
 class ApiController extends Controller
 {
     /**
@@ -9,7 +11,11 @@ class ApiController extends Controller
      */
     public function index(){
 
-        $this->response->setData(['aa'=>111])->send(200);
+        $request=new StoreRequest($this->di);
+
+        $request=$request->init();
+
+        $this->response->setData($request)->send(200);
     }
 
     public function store(){

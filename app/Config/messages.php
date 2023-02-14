@@ -12,5 +12,6 @@ return [
    'array'=>'the field %s must be array',
    'int'=>'the field %s must be integer',
    'required'=>'the field %s cannot be empty',
+   'data'=>'data cannot be empty',
    'regex'=>'after %s must be in the specified format',
 ];

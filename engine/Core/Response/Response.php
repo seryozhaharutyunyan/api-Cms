@@ -58,11 +58,6 @@ class Response
 
         $request = new \stdClass();
 
-        if($method!==$_SERVER['REQUEST_METHOD']){
-            http_response_code(405);
-            $request=$this->error($request, "The method is wrong. It should be $method");
-            echo json_encode($request);
-        }
         if($status>=200 && $status<300){
             $request=$this->success($request, $message);
         }
@@ -82,7 +77,7 @@ class Response
         $this->headersInit();
 
         if (Request::is('ajax')) {
-            echo json_encode( $_SERVER['REQUEST_METHOD']);
+            echo json_encode($request);
         }
 
         die();
@@ -123,7 +118,7 @@ class Response
     }
 
 
-    public function setData(array $data): static
+    public function setData(mixed $data): static
     {
         $this->data = $data;
 
