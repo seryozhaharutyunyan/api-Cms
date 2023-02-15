@@ -17,44 +17,65 @@ abstract class Request
     protected array $post = [];
     protected array $patch = [];
     protected array $put = [];
-    protected array $request = [];
-    protected array $cookie = [];
-    protected array $file = [];
-    protected array $server = [];
-    protected array $session = [];
-    protected string $table;
     protected Connection $db;
     protected QueryBuilder $queryBuilder;
-    protected ?int $id;
     protected Response $response;
 
 
     /**
      * Request Constructor
      */
-    public function __construct(DI $di, int|null $id = null)
+    public function __construct(DI $di)
     {
         $this->di = $di;
         $this->response = $this->di->get('response');
-        $this->cookie = $_COOKIE;
-        $this->file = $_FILES;
 
         $this->queryBuilder = new QueryBuilder();
         $this->db = new Connection();
-
-        $this->id = $id;
-
     }
 
-    protected function initPutPatch(){
-        $data=$this->decode();
+    protected function initPutPatch()
+    {
+        $data = $this->decode();
         return !is_null($data) ? $data : json_decode(file_get_contents('php://input'), true);
     }
 
-    protected function initPost(){
-        $data=$this->decode();
-        return !empty($_POST) ? $_POST : (!is_null($data)
-        ? $data : json_decode(file_get_contents('php://input'), true));
+    protected function initPost(): array
+    {
+        $data = $this->decode();
+        $result = !empty($_POST) ? $_POST : (!is_null($data)
+            ? $data : json_decode(file_get_contents('php://input'), true));
+
+        return $this->initFiles($result);
+    }
+
+    /**
+     * @param array $result
+     * @return array
+     */
+    protected function initFiles(array $result): array
+    {
+        if (!empty($_FILES)) {
+
+            foreach ($_FILES as $k => $value) {
+                if (is_array($value['name'])) {
+                    $file_count = count($value['name']);
+                    $file_keys = array_keys($value);
+
+                    for ($i = 0; $i < $file_count; $i++) {
+                        foreach ($file_keys as $key) {
+                            $result[$k][$i][$key] = $value[$key][$i];
+                        }
+                    }
+                } else {
+                    foreach ($value as $key => $item) {
+                        $result[$k][$key] = $item;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -63,27 +84,23 @@ abstract class Request
      * ]
      * @return array
      */
-    abstract protected function validate(): array;
+    abstract protected function validated(): array;
 
     /**
      * @return array
      * @throws \Exception
      */
-    public function init(): array
+    public function validate(): array
     {
-        if(empty($this->table)){
-            throw new \Exception("you didn't specify the main table to compare");
-        }
 
         $data = match ($_SERVER['REQUEST_METHOD']) {
-            'POST' => $this->post=$this->initPost(),
-            'PATCH' => $this->patch=$this->initPutPatch(),
-            'PUT' => $this->put=$this->initPutPatch(),
+            'POST' => $this->post = $this->initPost(),
+            'PATCH' => $this->patch = $this->initPutPatch(),
+            'PUT' => $this->put = $this->initPutPatch(),
         };
 
         $errors = [];
-
-        $validate = $this->validate();
+        $validate = $this->validated();
         if (!empty($validate)) {
             foreach ($validate as $key => $value) {
                 $validate[$key] = explode('|', $value);
@@ -106,9 +123,10 @@ abstract class Request
                                     $message = $this->{$s[0]}($value, $s[1], $key);
                                 }
                             } else {
-                                if (($v === 'nullable' && empty($value))) {
+                                if ($v === 'nullable' && empty($value)) {
                                     continue 2;
                                 }
+
                                 $message = $this->{$v}($value, $key);
                             }
                             if ($message !== true) {
@@ -117,7 +135,6 @@ abstract class Request
                             }
                         }
                     }
-
                 }
             }
         } else {
@@ -138,21 +155,25 @@ abstract class Request
     {
         $raw_data = file_get_contents('php://input');
         $boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));
-        if(empty($boundary)){
+
+        if (empty($boundary)) {
             return null;
         }
+
         $parts = array_slice(explode($boundary, $raw_data), 1);
         $data = [];
 
         foreach ($parts as $part) {
-
-            if ($part == "--\r\n") break;
+            if ($part == "--\r\n") {
+                break;
+            }
 
             $part = ltrim($part, "\r\n");
             [$raw_headers, $body] = explode("\r\n\r\n", $part, 2);
 
             $raw_headers = explode("\r\n", $raw_headers);
             $headers = [];
+
             foreach ($raw_headers as $header) {
                 [$name, $value] = explode(':', $header);
                 $headers[strtolower($name)] = ltrim($value, ' ');
@@ -160,21 +181,46 @@ abstract class Request
 
             if (isset($headers['content-disposition'])) {
                 $filename = null;
+                $tmp_name = null;
                 preg_match(
                     '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
                     $headers['content-disposition'],
                     $matches
                 );
-                [, $type, $name] = $matches;
-                isset($matches[4]) and $filename = $matches[4];
+                [, , $name] = $matches;
 
-                if ($name == 'userfile') {
-                    file_put_contents($filename, $body);
+                if (isset($matches[4])) {
+                    $filename = $matches[4];
+                    $tmp_name = ROOT_DIR . "\\src\\temp\\" . rand(1000000, 9999999) . substr($filename, 0, strrpos($filename, '.')) . ".tmp";
+                }
+                if (isset($tmp_name) && !empty($tmp_name)) {
+                    file_put_contents($tmp_name, $body);
+                    if (preg_match('/^(.+)\[(.+)\]/', $name, $m)) {
+                        [, $n, $i] = $m;
+                        $data[$n][(int)$i] = [
+                            'name' => $filename,
+                            'full_path' => $filename,
+                            'error' => 0,
+                            'tmp_name' => $tmp_name,
+                            'size' => filesize($tmp_name),
+                            'type' => $headers['content-type']
+                        ];
+                    } else {
+                        $data[$name] = [
+                            'name' => $filename,
+                            'full_path' => $filename,
+                            'error' => 0,
+                            'tmp_name' => $tmp_name,
+                            'size' => filesize($tmp_name),
+                            'type' => $headers['content-type']
+                        ];
+                    }
                 } else {
                     $data[$name] = substr($body, 0, strlen($body) - 2);
                 }
             }
         }
+
         return $data;
     }
 }

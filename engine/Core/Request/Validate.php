@@ -17,7 +17,7 @@ trait Validate
 
     protected function int(mixed $param, string $key): bool|string
     {
-        if (is_int($param)) {
+        if (is_numeric($param)) {
             return true;
         }
         return sprintf(Config::item('int', 'messages'), $key);
@@ -25,7 +25,7 @@ trait Validate
 
     protected function nullable(): bool
     {
-        return  true;
+        return true;
     }
 
 
@@ -72,26 +72,23 @@ trait Validate
 
     protected function bool(mixed $param, string $key): bool|string
     {
-        if (is_bool($param)) {
+        if ($param === true || $param === false || $param === 'true' || $param === 'false') {
             return true;
         }
         return sprintf(Config::item('bool', 'messages'), $key);
     }
 
-    protected function unique(mixed $param, string $key): bool|string
+    protected function unique(mixed $param, string $table, string $key): bool|string
     {
         $query = $this->queryBuilder
             ->select()
-            ->from($this->table)
+            ->from($table)
             ->where($key, $param)
             ->sql();
 
         $data = $this->db->set($query, $this->queryBuilder->values);
 
         if (!empty($data)) {
-            if ($this->id === $data->id) {
-                return true;
-            }
             return sprintf(Config::item('unique', 'messages'), $key);
         } else {
             return true;
@@ -116,13 +113,29 @@ trait Validate
 
     protected function file(mixed $param, string $key): bool|string
     {
-        if (is_file($param)) {
-            return true;
+        $flag = false;
+        if (is_array($param)) {
+            foreach ($param as $value) {
+                if(is_array($value)){
+                    if (isset($value['tmp_name']) && is_file($value['tmp_name'])) {
+                        $flag=true;
+                    }else{
+                        $flag=false;
+                        break;
+                    }
+                }else{
+                    if(isset($param['tmp_name']) && $param['tmp_name']){
+                        $flag=true;
+                    }
+                }
+            }
         }
-        return sprintf(Config::item('file', 'messages'), $key);
+
+        return $flag ? true : sprintf(Config::item('file', 'messages'), $key);
     }
 
-    protected function exist(mixed $param, string $table, string $colum, string $key): bool|string
+    protected
+    function exist(mixed $param, string $table, string $colum, string $key): bool|string
     {
         $query = $this->queryBuilder
             ->select()

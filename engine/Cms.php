@@ -2,6 +2,8 @@
 
 namespace Engine;
 
+use App\Request\Home\StoreRequest;
+use App\Request\ProductDotRequest;
 use Engine\Core\Router\DispatchedRoute;
 use Engine\Core\Router\Router;
 use Engine\DI\DI;
@@ -49,10 +51,35 @@ class Cms
                 $Controller->setGetParams($_GET);
             }
 
+            $requestClass = $this->getRequestClass($controller, $action);
+
+            if ($requestClass) {
+                $parameters = [
+                    new $requestClass($this->di),
+                    $parameters
+                ];
+            }
+
             \call_user_func_array([$Controller, $action], $parameters);
         } catch (\Exception $e) {
             echo $e->getMessage();
             exit();
         }
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function getRequestClass($controller, $action): false|string
+    {
+        $r = new \ReflectionMethod($controller, $action);
+        $params = $r->getParameters();
+        foreach ($params as $param) {
+            $type = (string)$param->getType();
+            if (str_contains($type, 'App\\Request\\')) {
+                return $type;
+            }
+        }
+        return false;
     }
 }

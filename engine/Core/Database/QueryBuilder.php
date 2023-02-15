@@ -35,17 +35,17 @@ class QueryBuilder
      * @param string $operator
      * @return $this
      */
-    public function where(string $column, string $value, string $operator = '=', string $order=''): static
+    public function where(string $column, string $value, string $operator = '=', string $order = ''): static
     {
-        if (isset($this->sql['where'])){
-            $i=count($this->sql['where']);
-        }else{
-            $i=0;
+        if (isset($this->sql['where'])) {
+            $i = count($this->sql['where']);
+        } else {
+            $i = 0;
         }
         $this->sql['where'][$i]['string'] = "{$column} {$operator} ?";
-        if($i!==0){
-            if ($order===''){
-                $order='and';
+        if ($i !== 0) {
+            if ($order === '') {
+                $order = 'and';
             }
             $this->sql['where'][$i]['order'] = strtoupper($order);
         }
@@ -58,7 +58,7 @@ class QueryBuilder
      * @param string $order
      * @return $this
      */
-    public function orderBy(string $field, string $order='ASC'): static
+    public function orderBy(string $field, string $order = 'ASC'): static
     {
         $this->sql['order_by'] = " ORDER BY {$field} {$order}";
         return $this;
@@ -92,7 +92,7 @@ class QueryBuilder
     public function insert(string $table): static
     {
         $this->reset();
-        $this->sql['insert']= "INSERT INTO {$table} ";
+        $this->sql['insert'] = "INSERT INTO {$table} ";
 
         return $this;
     }
@@ -107,8 +107,8 @@ class QueryBuilder
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 $this->sql['set'] .= "{$key} = ? ";
-                if(next($data)){
-                    $this->sql['set'].=", ";
+                if (next($data)) {
+                    $this->sql['set'] .= ", ";
                 }
                 $this->values[] = $value;
             }
@@ -130,8 +130,8 @@ class QueryBuilder
                     foreach ($value as $where) {
                         $sql .= $where['string'];
                         if (count($value) > 1 and next($value)) {
-                            $i=key($value);
-                            $sql .= " ".$value[$i]['order']." ";
+                            $i = key($value);
+                            $sql .= " " . $value[$i]['order'] . " ";
                         }
                     }
                 } else {

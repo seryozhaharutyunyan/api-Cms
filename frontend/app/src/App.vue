@@ -2,36 +2,48 @@
   <div>
     <input type="number" v-model.trim="name">
     <input type="date" v-model.trim="date">
+    <input ref="images" type="file" accept="image/*" @input="fileUpload($event)" placeholder="Image" multiple>
     <button @click="query()">add</button>
   </div>
 </template>
 <script>
 export default {
   name: 'App',
-  data(){
+  data() {
     return {
-      name:'',
-      date:'',
+      name: '',
+      date: '',
+      file: '',
     };
   },
   methods: {
     query() {
 
-      const formData=new FormData();
+      const formData = new FormData();
 
       formData.append('name', this.name)
       formData.append('date', this.date)
       formData.append('theme', 'sdbfhs')
+      const files = this.$refs.images.files;
+      //console.log(files);
 
-      this.axios.put('http://api-Cms', {
-        name:this.name
-      })
+      /*for (let i = 0; i < files.length; i++) {
+        formData.append('file['+i+']', files.item(i));
+      }*/
+      //console.log(formData.getAll('file[]'));
+      formData.append('file', files[0])
+
+      this.axios.put('http://api-Cms', formData)
           .then(resolve => {
             console.log(resolve.data);
           })
           .catch(error => {
             console.log(error);
           })
+    },
+
+    fileUpload(event) {
+      this.file = event.target.files;
     }
   },
 

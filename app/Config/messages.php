@@ -14,4 +14,5 @@ return [
    'required'=>'the field %s cannot be empty',
    'data'=>'data cannot be empty',
    'regex'=>'after %s must be in the specified format',
+   'valid'=>'field %s is not requested',
 ];

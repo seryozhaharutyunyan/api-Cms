@@ -6,14 +6,13 @@ use Engine\Core\Request\Request;
 
 class StoreRequest extends Request
 {
-    protected string $table='user';
-
-    protected function validate(): array
+    protected function validated(): array
     {
        return [
-           'name'=>'required|int',
+           'name'=>'required|string',
            'date'=>'nullable|date',
-           'theme'=>'required|string'
+           'theme'=>'nullable|string',
+           'file'=>'nullable|array|file'
        ];
     }
 }
