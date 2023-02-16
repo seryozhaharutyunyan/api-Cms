@@ -12,7 +12,7 @@ class ApiController extends Controller
     public function index(StoreRequest $request)
     {
         $request = $request->validate();
-        //$this->response->setData($request)->send(200);
+        $this->response->setData($request)->send(200);
     }
 
     public function store()

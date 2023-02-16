@@ -10,18 +10,15 @@ function path($section): string
 
     return match (strtolower($section)) {
         'controller' => sprintf($phatMask, 'Controller'),
-        'view' => sprintf($phatMask, 'View'),
         'config' => sprintf($phatMask, 'Config'),
         'model' => sprintf($phatMask, 'Model'),
         'language' => sprintf($phatMask, 'Language'),
-        'content' => sprintf($phatMask, 'content'),
         default => ROOT_DIR,
     };
 }
 
 function path_content($section = ''): string
 {
-    // Return path to correct section.
     return match (strtolower($section)) {
         'themes' => path('content') . '/themes',
         'plugins' => path('content') . '/plugins',

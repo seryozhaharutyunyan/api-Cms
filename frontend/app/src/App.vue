@@ -27,11 +27,11 @@ export default {
       const files = this.$refs.images.files;
       //console.log(files);
 
-      /*for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files.length; i++) {
         formData.append('file['+i+']', files.item(i));
-      }*/
+      }
       //console.log(formData.getAll('file[]'));
-      formData.append('file', files[0])
+      //formData.append('file', files[0])
 
       this.axios.put('http://api-Cms', formData)
           .then(resolve => {

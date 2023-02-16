@@ -4,12 +4,15 @@ namespace Engine;
 
 use Engine\DI\DI;
 
+/**
+ *
+ */
 class Load
 {
-    const MASK_MODEL_ENTITY     = '\%s\Model\%s\%s';
+    const MASK_MODEL_ENTITY = '\%s\Model\%s\%s';
     const MASK_MODEL_REPOSITORY = '\%s\Model\%s\%sRepository';
 
-    const FILE_MASK_LANGUAGE    = 'Language/%s/%s.ini';
+    const FILE_MASK_LANGUAGE = 'Language/%s/%s.ini';
 
     public DI $di;
 
@@ -29,11 +32,11 @@ class Load
      * @param string|bool $env
      * @return bool
      */
-    public function model(string $modelName, string|bool $modelDir = false, string|bool $env=false): bool
+    public function model(string $modelName, string|bool $modelDir = false, string|bool $env = false): bool
     {
-        $modelName  = ucfirst($modelName);
-        $modelDir   = $modelDir ? $modelDir : $modelName;
-        $env=$env ? $env : ENV;
+        $modelName = ucfirst($modelName);
+        $modelDir = $modelDir ? $modelDir : $modelName;
+        $env = $env ? $env : ENV;
 
         $namespaceModel = sprintf(
             self::MASK_MODEL_REPOSITORY,

@@ -34,17 +34,23 @@ abstract class Request
         $this->db = new Connection();
     }
 
-    protected function initPutPatch()
+    /**
+     * @return array
+     */
+    protected function initPutPatch(): array
     {
         $data = $this->decode();
         return !is_null($data) ? $data : json_decode(file_get_contents('php://input'), true);
     }
 
+    /**
+     * @return array
+     */
     protected function initPost(): array
     {
         $data = $this->decode();
-        $result = !empty($_POST) ? $_POST : (!is_null($data)
-            ? $data : json_decode(file_get_contents('php://input'), true));
+        $result = !empty($_POST) ? $_POST :
+            (!is_null($data) ? $data : json_decode(file_get_contents('php://input'), true));
 
         return $this->initFiles($result);
     }
@@ -56,7 +62,6 @@ abstract class Request
     protected function initFiles(array $result): array
     {
         if (!empty($_FILES)) {
-
             foreach ($_FILES as $k => $value) {
                 if (is_array($value['name'])) {
                     $file_count = count($value['name']);

@@ -12,15 +12,14 @@ use Engine\Helper\Common;
 class Cms
 {
     private DI $di;
-
     public Router $router;
 
     /**
-     * @param   DI  $di
+     * @param DI $di
      */
     public function __construct(DI $di)
     {
-        $this->di     = $di;
+        $this->di = $di;
         $this->router = $this->di->get('router');
     }
 
@@ -30,7 +29,7 @@ class Cms
     public function run(): void
     {
         try {
-            require_once __DIR__."/../routes/routes.php";
+            require_once __DIR__ . "/../routes/routes.php";
 
             $routerDispatch = $this->router->dispatch(Common::getMethod(), Common::getPathUrl());
 
@@ -40,14 +39,14 @@ class Cms
 
             [$class, $action] = \explode(':', $routerDispatch->get_controller(), 2);
 
-            $controller ="\\".ENV."\\Controller\\". $class;
+            $controller = "\\" . ENV . "\\Controller\\" . $class;
 
-            if($class==='ErrorController'){
+            if ($class === 'ErrorController') {
                 $controller = '\\Engine\\' . $class;
             }
             $parameters = $routerDispatch->get_parameters();
-            $Controller=new $controller($this->di);
-            if(!empty($_GET)){
+            $Controller = new $controller($this->di);
+            if (!empty($_GET)) {
                 $Controller->setGetParams($_GET);
             }
 

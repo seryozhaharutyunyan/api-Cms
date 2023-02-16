@@ -6,6 +6,12 @@ use Engine\Core\Config\Config;
 
 trait Validate
 {
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function required(mixed $param, string $key): bool|string
     {
 
@@ -15,6 +21,12 @@ trait Validate
         return sprintf(Config::item('required', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function int(mixed $param, string $key): bool|string
     {
         if (is_numeric($param)) {
@@ -23,12 +35,21 @@ trait Validate
         return sprintf(Config::item('int', 'messages'), $key);
     }
 
+    /**
+     * @return bool
+     */
     protected function nullable(): bool
     {
         return true;
     }
 
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function array(mixed $param, string $key): bool|string
     {
         if (is_array($param)) {
@@ -37,6 +58,13 @@ trait Validate
         return sprintf(Config::item('array', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $pattern
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function regex(mixed $param, string $pattern, string $key): bool|string
     {
         if (preg_match($pattern, $param)) {
@@ -45,6 +73,12 @@ trait Validate
         return sprintf(Config::item('regex', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function date(mixed $param, string $key): bool|string
     {
 
@@ -62,6 +96,12 @@ trait Validate
         return sprintf(Config::item('date', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function string(mixed $param, string $key): bool|string
     {
         if (is_string($param)) {
@@ -70,6 +110,12 @@ trait Validate
         return sprintf(Config::item('string', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function bool(mixed $param, string $key): bool|string
     {
         if ($param === true || $param === false || $param === 'true' || $param === 'false') {
@@ -78,6 +124,13 @@ trait Validate
         return sprintf(Config::item('bool', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $table
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function unique(mixed $param, string $table, string $key): bool|string
     {
         $query = $this->queryBuilder
@@ -95,6 +148,13 @@ trait Validate
         }
     }
 
+    /**
+     * @param mixed $param
+     * @param mixed $length
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function max(mixed $param, mixed $length, string $key): bool|string
     {
         if (strlen($param) <= (int)$length) {
@@ -103,6 +163,13 @@ trait Validate
         return sprintf(Config::item('max', 'messages'), $key, $length);
     }
 
+    /**
+     * @param mixed $param
+     * @param mixed $length
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function min(mixed $param, mixed $length, string $key): bool|string
     {
         if (strlen($param) > (int)$length) {
@@ -111,21 +178,27 @@ trait Validate
         return sprintf(Config::item('min', 'messages'), $key, $length);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function file(mixed $param, string $key): bool|string
     {
         $flag = false;
         if (is_array($param)) {
             foreach ($param as $value) {
-                if(is_array($value)){
+                if (is_array($value)) {
                     if (isset($value['tmp_name']) && is_file($value['tmp_name'])) {
-                        $flag=true;
-                    }else{
-                        $flag=false;
+                        $flag = true;
+                    } else {
+                        $flag = false;
                         break;
                     }
-                }else{
-                    if(isset($param['tmp_name']) && $param['tmp_name']){
-                        $flag=true;
+                } else {
+                    if (isset($param['tmp_name']) && $param['tmp_name']) {
+                        $flag = true;
                     }
                 }
             }
@@ -134,6 +207,14 @@ trait Validate
         return $flag ? true : sprintf(Config::item('file', 'messages'), $key);
     }
 
+    /**
+     * @param mixed $param
+     * @param string $table
+     * @param string $colum
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected
     function exist(mixed $param, string $table, string $colum, string $key): bool|string
     {
