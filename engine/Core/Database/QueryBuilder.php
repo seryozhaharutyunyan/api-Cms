@@ -6,6 +6,7 @@ class QueryBuilder
 {
     protected array $sql = [];
     public array $values = [];
+    protected string $table='';
 
     /**
      * @param string $fields
@@ -26,6 +27,8 @@ class QueryBuilder
     public function from(string $table): static
     {
         $this->sql['from'] = " FROM {$table} ";
+        $this->table=$table;
+
         return $this;
     }
 
@@ -42,7 +45,12 @@ class QueryBuilder
         } else {
             $i = 0;
         }
+
         $this->sql['where'][$i]['string'] = "{$column} {$operator} ?";
+        if(!empty($this->table)){
+            $this->sql['where'][$i]['string'] = "{$this->table}.{$column} {$operator} ?";
+        }
+
         if ($i !== 0) {
             if ($order === '') {
                 $order = 'and';
@@ -97,6 +105,13 @@ class QueryBuilder
         return $this;
     }
 
+    public function join(string $table, string $ownerKey, string $foreignKey, string $order='LEFT'): static
+    {
+        $this->sql['join']=" {$order} JOIN {$table} ON {$this->table}.{$foreignKey} = {$table}.{$ownerKey} ";
+
+        return $this;
+    }
+
     /**
      * @param array $data
      * @return $this
@@ -129,7 +144,7 @@ class QueryBuilder
                     $sql .= ' WHERE ';
                     foreach ($value as $where) {
                         $sql .= $where['string'];
-                        if (count($value) > 1 and next($value)) {
+                        if (count($value) > 1 && next($value)) {
                             $i = key($value);
                             $sql .= " " . $value[$i]['order'] . " ";
                         }
@@ -149,5 +164,6 @@ class QueryBuilder
     {
         $this->sql = [];
         $this->values = [];
+        $this->table='';
     }
 }

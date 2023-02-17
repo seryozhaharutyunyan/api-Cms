@@ -2,11 +2,11 @@
 
 namespace App\Model\User;
 
-use Engine\Core\Database\ActiveRecord;
+use Engine\Core\Database\UserActiveRecord;
 
 class User
 {
-    use ActiveRecord;
+    use UserActiveRecord;
 
 
     protected string $table = 'user';
@@ -14,8 +14,8 @@ class User
     private string $email;
     private string $password;
     private string $role;
-    private string $hash;
     private string $date_reg;
+    private ?string $token;
 
     /**
      * @return int
@@ -23,14 +23,6 @@ class User
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @param integer $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -84,22 +76,6 @@ class User
     /**
      * @return string
      */
-    public function getHash(): string
-    {
-        return $this->hash;
-    }
-
-    /**
-     * @param string $hash
-     */
-    public function setHash(string $hash): void
-    {
-        $this->hash = $hash;
-    }
-
-    /**
-     * @return string
-     */
     public function getDateReg(): string
     {
         return $this->date_reg;
@@ -111,5 +87,29 @@ class User
     public function setDateReg(string $date_reg): void
     {
         $this->date_reg = $date_reg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(string|null $token): void
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }

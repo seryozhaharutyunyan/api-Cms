@@ -2,10 +2,10 @@
 
 namespace Engine;
 
-use Engine\Core\Config\Config;
+use App\Model\User\User;
+use Engine\Core\Auth\Auth;
 use Engine\Core\Database\Connection;
 use Engine\Core\Database\QueryBuilder;
-use Engine\Core\Request\Request;
 use Engine\Core\Response\Response;
 use Engine\Core\Template\View;
 use Engine\DI\DI;
@@ -19,6 +19,7 @@ abstract class Controller
     protected QueryBuilder $query;
     protected Load $load;
     protected Response $response;
+    //protected View $view;
 
     /**
      * @param DI $di
@@ -26,10 +27,11 @@ abstract class Controller
     public function __construct(DI $di)
     {
         $this->di = $di;
-        $this->db = $this->di->get('db');
+        $this->db = Connection::getInstance();
         $this->config = $this->di->get('config');
         $this->load = $this->di->get('load');
         $this->response = $this->di->get('response');
+        //$this->view=$this->di->get('view');
 
         $this->initVars();
 
@@ -86,5 +88,24 @@ abstract class Controller
         }
 
         return $this;
+    }
+
+    protected function updateToken(int $id, string $token): string|null
+    {
+        $user = new User($id);
+
+        if ($user->getToken() === $token) {
+            $tokenNew = Auth::createToken();
+            if ($tokenNew) {
+                $user->setToken($tokenNew);
+                $user->save();
+                Auth::unAuthorize('session');
+                Auth::authorize($tokenNew, 'session');
+            }
+
+            return $tokenNew;
+        }
+
+        return null;
     }
 }

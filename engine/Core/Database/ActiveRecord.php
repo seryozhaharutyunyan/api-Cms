@@ -2,6 +2,7 @@
 
 namespace Engine\Core\Database;
 
+use Engine\DI\DI;
 use \ReflectionClass;
 use \ReflectionProperty;
 
@@ -9,6 +10,7 @@ trait ActiveRecord
 {
     protected Connection $db;
     protected QueryBuilder $queryBuilder;
+    protected object|array $data;
 
     /**
      * ActiveRecord constructor.
@@ -16,13 +18,12 @@ trait ActiveRecord
      */
     public function __construct(int $id = 0)
     {
-        global $di;
-
-        $this->db           = $di->get('db');
+        $this->db = Connection::getInstance();
         $this->queryBuilder = new QueryBuilder();
 
         if ($id) {
             $this->setId($id);
+            $this->getData();
         }
     }
 
@@ -35,9 +36,26 @@ trait ActiveRecord
     }
 
     /**
+     * @return void
+     */
+    protected function getData(): void
+    {
+        $data = $this->findOne();
+        $properties = $this->getProperties();
+
+        foreach ($properties as $value) {
+            foreach ($data as $key => $item) {
+                if ($value->getName() === $key) {
+                    $this->{"set".ucfirst($key)}($item);
+                }
+            }
+        }
+    }
+
+    /**
      * @return object|null
      */
-    public function findOne(): ?object
+    protected function findOne(): ?object
     {
         $find = $this->db->set(
             $this->queryBuilder
@@ -52,9 +70,10 @@ trait ActiveRecord
     }
 
     /**
-     *  Save User
+     *  Save UserActiveRecord
      */
-    public function save() {
+    public function save()
+    {
         $properties = $this->getIssetProperties();
 
         try {

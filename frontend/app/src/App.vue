@@ -25,15 +25,16 @@ export default {
       formData.append('date', this.date)
       formData.append('theme', 'sdbfhs')
       const files = this.$refs.images.files;
-      //console.log(files);
+
 
       for (let i = 0; i < files.length; i++) {
-        formData.append('file['+i+']', files.item(i));
+        formData.append('file[]', files.item(i));
       }
-      //console.log(formData.getAll('file[]'));
-      //formData.append('file', files[0])
 
-      this.axios.put('http://api-Cms', formData)
+      this.axios.post('http://api-Cms/login', {
+        email:'admin@mail.ru',
+        password:'071172'
+      })
           .then(resolve => {
             console.log(resolve.data);
           })

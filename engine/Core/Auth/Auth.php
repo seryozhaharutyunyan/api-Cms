@@ -2,26 +2,33 @@
 
 namespace Engine\Core\Auth;
 
+use App\Model\User\User;
 use Engine\Helper\Cookie;
 use Engine\Helper\Session;
 
-class Auth implements AuthInterface
+class Auth
 {
-    protected bool $authorized = false;
-    protected ?string $hash_user = null;
+    protected static ?int $id = null;
 
     /**
      * @return bool
      */
-    public function authorized(): bool
+    public static function authorized(): bool
     {
-        return $this->authorized;
+        if(Session::get('auth_authorized')){
+            return Session::get('auth_authorized');
+        }
+
+        if (Cookie::get('auth_authorized')){
+            return Cookie::get('auth_authorized');
+        }
+        return false;
     }
 
     /**
      * @return string|null
      */
-    public function hashUser(): string|null
+    public static function hashUser(): string|null
     {
         if(Session::get('auth_user')){
             return Session::get('auth_user');
@@ -31,28 +38,25 @@ class Auth implements AuthInterface
 
 
     /**
-     * @param string $hash_user
+     * @param int $id
      * @param string $method
      * @return void
      */
-    public function authorize(string $hash_user, string $method = 'cookie'): void
+    public static function authorize(int $id, string $method = 'cookie'): void
     {
         if ($method === 'session') {
             Session::set('auth_authorized', true);
-            Session::set('auth_user', $hash_user);
+            Session::set('auth_user', $id);
         } else {
             Cookie::set('auth_authorized', true);
-            Cookie::set('auth_user', $hash_user);
+            Cookie::set('auth_user', $id);
         }
-
-        $this->hash_user = $hash_user;
-        $this->authorized = true;
     }
 
     /**
      * @return void
      */
-    public function unAuthorize($method='cookie'): void
+    public static function unAuthorize(string $method='cookie'): void
     {
         if ($method === 'session') {
             Session::delete('auth_authorized');
@@ -61,9 +65,6 @@ class Auth implements AuthInterface
             Cookie::delete('auth_authorized');
             Cookie::delete('auth_user');
         }
-
-        $this->hash_user = null;
-        $this->authorized = false;
     }
 
     /**
@@ -89,8 +90,36 @@ class Auth implements AuthInterface
      * @return string
      * @throws \Exception
      */
-    protected static function createToken(): string
+    public static function createToken(): string
     {
-        return bin2hex(random_bytes(32));
+        return bin2hex(random_bytes(64));
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws \Exception
+     */
+    public static function addToken(User $user): string
+    {
+        $token = Auth::createToken();
+        if ($token) {
+            $user->setToken($token);
+            $user->save();
+            Auth::authorize($user->getId(), \Config::item('saveMethod'));
+        }
+
+        return $token;
+    }
+
+    /**
+     * @param User $user
+     * @throws \Exception
+     */
+    public static function deleteToken(User $user): void
+    {
+        $user->setToken(null);
+        $user->save();
+        Auth::unAuthorize(\Config::item('saveMethod'));
     }
 }

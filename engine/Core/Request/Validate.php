@@ -215,8 +215,7 @@ trait Validate
      * @return bool|string
      * @throws \Exception
      */
-    protected
-    function exist(mixed $param, string $table, string $colum, string $key): bool|string
+    protected function exist(mixed $param, string $table, string $colum, string $key): bool|string
     {
         $query = $this->queryBuilder
             ->select()

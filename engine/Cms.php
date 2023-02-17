@@ -2,8 +2,6 @@
 
 namespace Engine;
 
-use App\Request\Home\StoreRequest;
-use App\Request\ProductDotRequest;
 use Engine\Core\Router\DispatchedRoute;
 use Engine\Core\Router\Router;
 use Engine\DI\DI;
@@ -44,20 +42,15 @@ class Cms
             if ($class === 'ErrorController') {
                 $controller = '\\Engine\\' . $class;
             }
+
             $parameters = $routerDispatch->get_parameters();
             $Controller = new $controller($this->di);
+
             if (!empty($_GET)) {
                 $Controller->setGetParams($_GET);
             }
 
-            $requestClass = $this->getRequestClass($controller, $action);
-
-            if ($requestClass) {
-                $parameters = [
-                    new $requestClass($this->di),
-                    $parameters
-                ];
-            }
+            $parameters = $this->getClassParameters($controller, $action, $parameters);
 
             \call_user_func_array([$Controller, $action], $parameters);
         } catch (\Exception $e) {
@@ -69,16 +62,27 @@ class Cms
     /**
      * @throws \ReflectionException
      */
-    private function getRequestClass($controller, $action): false|string
+    private function getClassParameters($controller, $action, $parameters): array
     {
+        $types = [];
         $r = new \ReflectionMethod($controller, $action);
         $params = $r->getParameters();
         foreach ($params as $param) {
             $type = (string)$param->getType();
-            if (str_contains($type, 'App\\Request\\')) {
-                return $type;
+            if (str_contains($type, ENV . '\\Request\\')) {
+                $types[] = new $type($this->di);
+            }
+            if (str_contains($type, ENV . '\\Model\\') && isset($parameters['id'])) {
+                $types[] = new $type($parameters['id']);
+                unset($parameters['id']);
             }
         }
-        return false;
+
+        if (!empty($type)) {
+            $types[] = $parameters;
+            return $types;
+        }
+
+        return $parameters;
     }
 }

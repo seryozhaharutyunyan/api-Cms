@@ -51,7 +51,7 @@ class Session
             return $_SESSION[$key];
         }
 
-        return null;
+        return false;
     }
 
     /**

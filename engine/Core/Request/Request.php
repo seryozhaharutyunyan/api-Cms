@@ -31,7 +31,7 @@ abstract class Request
         $this->response = $this->di->get('response');
 
         $this->queryBuilder = new QueryBuilder();
-        $this->db = new Connection();
+        $this->db = Connection::getInstance();
     }
 
     /**

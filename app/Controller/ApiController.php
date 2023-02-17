@@ -2,22 +2,28 @@
 
 namespace App\Controller;
 
+use App\Model\User\User;
 use App\Request\Home\StoreRequest;
+use Engine\Core\Auth\Auth;
 
 class ApiController extends Controller
 {
     /**
      * @throws \Exception
      */
-    public function index(StoreRequest $request)
+    public function index()
     {
-        $request = $request->validate();
-        $this->response->setData($request)->send(200);
+        var_dump(Auth::authorized());
     }
 
     public function store()
     {
         $this->response->setData(['aa2' => 111])->send(200);
+    }
+
+    public function user(User $user)
+    {
+        echo $user->getEmail();
     }
 
 }

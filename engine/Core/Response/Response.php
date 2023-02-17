@@ -36,7 +36,7 @@ class Response
         }
     }
 
-    protected function setHeader($key, $value): void
+    public function setHeader($key, $value): void
     {
         $this->headers[$key] = $value;
     }

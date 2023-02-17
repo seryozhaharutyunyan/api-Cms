@@ -5,4 +5,5 @@ return [
     'defaultLang'=>'english',
     'defaultTimezone'=>'America/Chicago',
     'defaultTheme'=>'default',
+    'saveMethod'=>'session' // session || cookie
 ];

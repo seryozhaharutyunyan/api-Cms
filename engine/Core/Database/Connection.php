@@ -3,20 +3,16 @@
 namespace Engine\Core\Database;
 
 use Engine\Core\Config\Config;
+use Engine\Singleton;
 use PDO;
+
 
 class Connection
 {
+    use Singleton;
+
     private PDO $link;
 
-    /**
-     * Connection construct
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        $this->connect();
-    }
 
     /**
      * @return void
