@@ -90,6 +90,10 @@ class Cms
         return $parameters;
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     private function auth(): void
     {
         if (Auth::authorized()) {
