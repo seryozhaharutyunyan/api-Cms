@@ -118,13 +118,16 @@ trait Validate
      */
     protected function email(mixed $param, string $key): bool|string
     {
-        if (preg_match('/^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_]+\.[a-zA-Z]/', $param)) {
+        if (preg_match('/^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_]+\.[a-zA-Z]+/', $param)) {
             return true;
         }
         return sprintf(Config::item('email', 'messages'), $key);
     }
 
-    protected function confirmation(mixed $param, string $key): bool|string
+    /**
+     * @return bool
+     */
+    protected function confirmation(): bool
     {
         return true;
     }

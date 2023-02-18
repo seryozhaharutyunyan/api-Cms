@@ -20,6 +20,14 @@ class QueryBuilder
         return $this;
     }
 
+    public function delete(): static
+    {
+        $this->reset();
+        $this->sql['delete'] = "DELETE ";
+
+        return $this;
+    }
+
     /**
      * @param string $table
      * @return $this

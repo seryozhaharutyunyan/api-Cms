@@ -2,6 +2,10 @@
 
 namespace Engine\Core\Router;
 
+use Engine\Core\Auth\Auth;
+use Engine\Core\Response\Response;
+use Engine\DI\DI;
+
 final class Router
 {
 
@@ -10,9 +14,10 @@ final class Router
     private ?UrlDispatcher $dispatcher = null;
 
     /**
-     * @param $host
+     * @param string $host
+     * @throws \Exception
      */
-    public function __construct($host)
+    public function __construct(string $host)
     {
         $this->host = $host;
     }
@@ -26,19 +31,20 @@ final class Router
     }
 
     /**
-     * @param   string  $key
-     * @param   string  $pattern
-     * @param   string  $controller
-     * @param   string  $method
+     * @param string $key
+     * @param string $pattern
+     * @param string $controller
+     * @param string $method
      *
      * @return void
      */
-    public function add(string $key, string $pattern, string $controller, string $method = 'GET'): void
+    public function add(string $key, string $method, string $pattern, string $controller, string $guarded = ''): void
     {
         $this->routes[$key] = [
-            'pattern'    => $pattern,
+            'pattern' => $pattern,
             'controller' => $controller,
-            'method'     => $method,
+            'method' => strtoupper($method),
+            'guarded' => strtolower($guarded)
         ];
     }
 
@@ -55,15 +61,20 @@ final class Router
 
 
     /**
-     * @return UrlDispatcher
+     * @return UrlDispatcher|int
      */
-    public function getDispatcher(): UrlDispatcher
+    public function getDispatcher(): ?UrlDispatcher
     {
         if ($this->dispatcher === null) {
             $this->dispatcher = new UrlDispatcher();
 
             foreach ($this->routes as $route) {
-                $this->dispatcher->register($route['method'], $route['pattern'], $route['controller']);
+                if ($route['guarded'] === 'auth' && !Auth::authorized()) {
+                    $this->dispatcher->register($route['method'], $route['pattern'], 'ErrorController:unauthorized');
+                } else {
+                    $this->dispatcher->register($route['method'], $route['pattern'], $route['controller']);
+                }
+
             }
         }
 

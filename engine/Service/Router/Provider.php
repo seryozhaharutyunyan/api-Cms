@@ -11,15 +11,14 @@ class Provider extends AbstractProvider
     /**
      * @var string
      */
-    public string $serviceName='router';
+    public string $serviceName = 'router';
 
     /**
      * @throws \Exception
      */
     public function init()
     {
-        $db= new Router(Config::item('base_url'));
-
-        $this->di->set($this->serviceName, $db);
+        $router = new Router(Config::item('base_url'));
+        $this->di->set($this->serviceName, $router);
     }
 }

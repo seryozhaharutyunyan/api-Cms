@@ -141,7 +141,7 @@ abstract class Request
                             }
                             if ($message !== true) {
                                 $errors[$key] = $message;
-                                continue 3;
+                                continue 2;
                             }
                         }
                     }

@@ -15,11 +15,11 @@ class Auth
      */
     public static function authorized(): bool
     {
-        if(Session::get('auth_authorized')){
+        if (Session::get('auth_authorized')) {
             return Session::get('auth_authorized');
         }
 
-        if (Cookie::get('auth_authorized')){
+        if (Cookie::get('auth_authorized')) {
             return Cookie::get('auth_authorized');
         }
         return false;
@@ -30,7 +30,7 @@ class Auth
      */
     public static function hashUser(): string|null
     {
-        if(Session::get('auth_user')){
+        if (Session::get('auth_user')) {
             return Session::get('auth_user');
         }
         return Cookie::get('auth_user');
@@ -56,7 +56,7 @@ class Auth
     /**
      * @return void
      */
-    public static function unAuthorize(string $method='cookie'): void
+    public static function unAuthorize(string $method = 'cookie'): void
     {
         if ($method === 'session') {
             Session::delete('auth_authorized');

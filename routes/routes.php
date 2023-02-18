@@ -3,11 +3,11 @@
  * list routes
  */
 
-$this->router->add('api', '/', 'ApiController:index');
-$this->router->add('login', '/login', 'AuthController:login', "POST");
-$this->router->add('registration', '/reg', 'AuthController:registration', "POST");
-$this->router->add('logout', '/logout/{id:int}', 'AuthController:logout');
-$this->router->add('user', '/user/{id:int}', 'ApiController:user');
-$this->router->add('api1', '/aaa', 'ApiController:store', 'DELETE');
-$this->router->add('Product', '/product/{id:int}', 'ProductController:storeProduct', 'POST');
+$this->router->add('api', 'GET', '/', 'ApiController:index');
+$this->router->add('login', "POST", '/login', 'AuthController:login');
+$this->router->add('registration', "POST", '/reg', 'AuthController:registration', 'auth');
+$this->router->add('logout', 'get', '/logout/{id:int}', 'AuthController:logout', 'auth');
+$this->router->add('user', 'GET', '/user/{id:int}', 'ApiController:user');
+$this->router->add('api1', 'DELETE', '/aaa', 'ApiController:store');
+$this->router->add('Product', 'POST', '/product/{id:int}', 'ProductController:storeProduct');
 

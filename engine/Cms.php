@@ -2,6 +2,7 @@
 
 namespace Engine;
 
+use Engine\Core\Response\Response;
 use Engine\Core\Router\DispatchedRoute;
 use Engine\Core\Router\Router;
 use Engine\DI\DI;
@@ -11,6 +12,7 @@ class Cms
 {
     private DI $di;
     public Router $router;
+    private Response $response;
 
     /**
      * @param DI $di
@@ -18,6 +20,7 @@ class Cms
     public function __construct(DI $di)
     {
         $this->di = $di;
+        $this->response=$this->di->get('response');
         $this->router = $this->di->get('router');
     }
 
@@ -30,9 +33,13 @@ class Cms
             require_once __DIR__ . "/../routes/routes.php";
 
             $routerDispatch = $this->router->dispatch(Common::getMethod(), Common::getPathUrl());
-
+            var_dump($routerDispatch);
             if ($routerDispatch === null) {
                 $routerDispatch = new DispatchedRoute('ErrorController:page404');
+            }
+
+            if(str_starts_with($routerDispatch->get_controller(), 'Error')){
+                $routerDispatch = new DispatchedRoute($routerDispatch->get_controller());
             }
 
             [$class, $action] = \explode(':', $routerDispatch->get_controller(), 2);
