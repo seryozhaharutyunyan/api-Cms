@@ -132,6 +132,11 @@ abstract class Request
                                     continue 2;
                                 }
 
+                                if($v==='confirmation' && $value !==$data["confirmation_$key"]){
+                                    $errors[$key]=sprintf(Config::item('confirmation', 'messages'), $key);
+                                    continue 2;
+                                }
+
                                 $message = $this->{$v}($value, $key);
                             }
                             if ($message !== true) {

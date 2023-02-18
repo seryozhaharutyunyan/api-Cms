@@ -116,6 +116,25 @@ trait Validate
      * @return bool|string
      * @throws \Exception
      */
+    protected function email(mixed $param, string $key): bool|string
+    {
+        if (preg_match('/^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_]+\.[a-zA-Z]/', $param)) {
+            return true;
+        }
+        return sprintf(Config::item('email', 'messages'), $key);
+    }
+
+    protected function confirmation(mixed $param, string $key): bool|string
+    {
+        return true;
+    }
+
+    /**
+     * @param mixed $param
+     * @param string $key
+     * @return bool|string
+     * @throws \Exception
+     */
     protected function bool(mixed $param, string $key): bool|string
     {
         if ($param === true || $param === false || $param === 'true' || $param === 'false') {

@@ -15,4 +15,6 @@ return [
    'data'=>'data cannot be empty',
    'regex'=>'after %s must be in the specified format',
    'valid'=>'field %s is not requested',
+   'email'=>'the field %s is not an email',
+   'confirmation'=>'the field %s is not an confirmation',
 ];

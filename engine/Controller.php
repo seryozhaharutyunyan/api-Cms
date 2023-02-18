@@ -13,7 +13,7 @@ use Engine\DI\DI;
 abstract class Controller
 {
     protected DI $di;
-    protected mixed $get=[];
+    protected mixed $get = [];
     protected Connection $db;
     protected array $config;
     protected QueryBuilder $query;
@@ -35,7 +35,7 @@ abstract class Controller
 
         $this->initVars();
 
-        $this->query= new QueryBuilder();
+        $this->query = new QueryBuilder();
     }
 
     /**
@@ -79,11 +79,11 @@ abstract class Controller
      */
     public function initVars(): static
     {
-        $vars=array_keys(get_object_vars($this));
+        $vars = array_keys(get_object_vars($this));
 
-        foreach ($vars as $var){
-            if($this->di->has($var)){
-                $this->{$var}=$this->di->get($var);
+        foreach ($vars as $var) {
+            if ($this->di->has($var)) {
+                $this->{$var} = $this->di->get($var);
             }
         }
 

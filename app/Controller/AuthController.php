@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\User\User;
 use App\Request\LoginRequest;
+use App\Request\RegRequest;
 use Engine\Controller;
 use Engine\Core\Auth\Auth;
 use Engine\Core\Auth\AuthInterface;
@@ -30,9 +31,11 @@ class AuthController extends Controller implements AuthInterface
         $this->response->send(200, 'Logout');
     }
 
-    public function registration()
+    public function registration(RegRequest $request)
     {
-        // TODO: Implement registration() method.
+        $date=$request->validate();
+
+        $this->response->setData($date)->send();
     }
 
     public function resetPassword()
