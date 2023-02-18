@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Model\User\User;
 use App\Request\Home\StoreRequest;
 use Engine\Core\Auth\Auth;
+use Engine\Helper\Session;
 
 class ApiController extends Controller
 {
@@ -13,7 +14,8 @@ class ApiController extends Controller
      */
     public function index()
     {
-        var_dump(Auth::authorized());
+        var_dump($_SESSION);
+        //$this->response->setData($_SESSION)->send();
     }
 
     public function store()

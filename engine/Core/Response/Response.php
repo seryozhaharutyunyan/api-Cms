@@ -2,6 +2,7 @@
 
 namespace Engine\Core\Response;
 
+use Engine\Core\Auth\Auth;
 use Engine\Core\Config\Config;
 use Engine\Core\Router\Router;
 use Engine\DI\DI;
@@ -70,6 +71,11 @@ class Response
         };
 
         http_response_code($status);
+
+        $token=Auth::getToken();
+        if($token){
+            $this->setHeader("Authorization", "Bearer $token");
+        }
 
         $this->setHeader("Access-Control-Allow-Methods", $method);
         $this->setHeader("Access-Control-Allow-Origin", Config::item('host', 'cors'));

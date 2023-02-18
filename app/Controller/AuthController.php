@@ -19,7 +19,10 @@ class AuthController extends Controller implements AuthInterface
         if(!empty($user)){
             $token=Auth::addToken(new User($user->id));
             $this->response->setHeader('Authorization', "Bearer $token");
-            $this->response->send(200, 'Authorization');
+            $this->response->setData([
+                'token'=>$token,
+                'user'=>$user->id
+                ])->send(200, 'Authorization');
         }
 
         $this->response->send(415, 'Invalid authorization data');
@@ -28,7 +31,7 @@ class AuthController extends Controller implements AuthInterface
     public function logout(User $user)
     {
         Auth::deleteToken($user);
-        $this->response->send(200, 'Logout');
+        //$this->response->send(200, 'Logout');
     }
 
     public function registration(RegRequest $request)

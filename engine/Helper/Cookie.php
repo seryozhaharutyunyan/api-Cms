@@ -27,7 +27,7 @@ class Cookie
             return $_COOKIE[$key];
         }
 
-        return null;
+        return false;
     }
 
     /**

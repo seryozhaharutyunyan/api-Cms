@@ -14,7 +14,7 @@ class Session
     }
 
     /**
-     * @param   array  $data
+     * @param array $data
      */
     public static function setData(array $data): void
     {
@@ -50,7 +50,6 @@ class Session
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
         }
-
         return false;
     }
 

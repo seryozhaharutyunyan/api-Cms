@@ -67,7 +67,6 @@ final class Router
     {
         if ($this->dispatcher === null) {
             $this->dispatcher = new UrlDispatcher();
-
             foreach ($this->routes as $route) {
                 if ($route['guarded'] === 'auth' && !Auth::authorized()) {
                     $this->dispatcher->register($route['method'], $route['pattern'], 'ErrorController:unauthorized');

@@ -28,12 +28,23 @@ class Auth
     /**
      * @return string|null
      */
-    public static function hashUser(): string|null
+    public static function getUser(): string|null
     {
         if (Session::get('auth_user')) {
             return Session::get('auth_user');
         }
         return Cookie::get('auth_user');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getToken(): string|null
+    {
+        if (Session::get('auth_token')) {
+            return Session::get('auth_token');
+        }
+        return Cookie::get('auth_token');
     }
 
 
@@ -42,14 +53,16 @@ class Auth
      * @param string $method
      * @return void
      */
-    public static function authorize(int $id, string $method = 'cookie'): void
+    public static function authorize(int $id, string $token, string $method = 'cookie'): void
     {
         if ($method === 'session') {
             Session::set('auth_authorized', true);
             Session::set('auth_user', $id);
+            Session::set('auth_token', $token);
         } else {
             Cookie::set('auth_authorized', true);
             Cookie::set('auth_user', $id);
+            Cookie::set('auth_token', $token);
         }
     }
 
@@ -59,11 +72,13 @@ class Auth
     public static function unAuthorize(string $method = 'cookie'): void
     {
         if ($method === 'session') {
-            Session::delete('auth_authorized');
+            Session::set('auth_authorized', false);
             Session::delete('auth_user');
+            Session::delete('auth_token');
         } else {
-            Cookie::delete('auth_authorized');
+            Cookie::set('auth_authorized', false);
             Cookie::delete('auth_user');
+            Cookie::delete('auth_token');
         }
     }
 
@@ -106,7 +121,7 @@ class Auth
         if ($token) {
             $user->setToken($token);
             $user->save();
-            Auth::authorize($user->getId(), \Config::item('saveMethod'));
+            Auth::authorize($user->getId(), $token, \Config::item('saveMethod'));
         }
 
         return $token;
