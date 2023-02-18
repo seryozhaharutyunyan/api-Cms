@@ -97,7 +97,6 @@ class Cms
     private function auth(): void
     {
         if (Auth::authorized()) {
-
             if (isset($_SERVER['HTTP_AUTHORIZATION']) && !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
                 $this->response->send(401);
                 die;
@@ -110,6 +109,5 @@ class Cms
                 Auth::addToken($user);
             }
         }
-
     }
 }

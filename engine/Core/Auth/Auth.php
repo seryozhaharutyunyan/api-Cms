@@ -17,9 +17,7 @@ class Auth
     {
         if (Session::get('auth_authorized')) {
             return Session::get('auth_authorized');
-        }
-
-        if (Cookie::get('auth_authorized')) {
+        } elseif (Cookie::get('auth_authorized')) {
             return Cookie::get('auth_authorized');
         }
         return false;
