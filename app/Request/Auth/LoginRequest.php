@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Request;
+namespace App\Request\Auth;
 
 use Engine\Core\Request\Request;
 

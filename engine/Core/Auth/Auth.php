@@ -105,7 +105,7 @@ class Auth
      */
     public static function createToken(): string
     {
-        return bin2hex(random_bytes(64));
+        return bin2hex(random_bytes(128));
     }
 
     /**
@@ -134,5 +134,28 @@ class Auth
         $user->setToken(null);
         $user->save();
         Auth::unAuthorize(\Config::item('saveMethod'));
+    }
+
+    /**
+     * @return bool|int
+     * @throws \Exception
+     */
+    public static function authProtection(): bool|int
+    {
+        if (Auth::authorized()) {
+            if (isset($_SERVER['HTTP_AUTHORIZATION']) && !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+                return 409;
+            }
+            $token = $matches[1] ?? false;
+            $user = new User(Auth::getUser());
+            if ($user->getToken() !== $token) {
+                Auth::deleteToken($user);
+                return false;
+            } else {
+                Auth::addToken($user);
+                return true;
+            }
+        }
+        return false;
     }
 }

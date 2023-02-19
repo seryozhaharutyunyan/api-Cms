@@ -6,6 +6,7 @@ use App\Model\User\User;
 use Engine\Core\Auth\Auth;
 use Engine\Core\Database\Connection;
 use Engine\Core\Database\QueryBuilder;
+use Engine\Core\Mail\Mail;
 use Engine\Core\Response\Response;
 use Engine\Core\Template\View;
 use Engine\DI\DI;

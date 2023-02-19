@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Request;
+namespace App\Request\Auth;
 
 use Engine\Core\Request\Request;
 
-class RegRequest extends Request
+class RegistrationRequest extends Request
 {
 
     protected function validated(): array

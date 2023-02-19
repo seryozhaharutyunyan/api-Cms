@@ -2,7 +2,7 @@
 
 namespace Engine\Helper;
 
-class Request
+class RequestHelper
 {
     public static function is(string $method): bool
     {
@@ -18,7 +18,7 @@ class Request
      *
      * @return string
      */
-    public static function method(): string
+    private static function method(): string
     {
         return strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
     }
@@ -28,7 +28,7 @@ class Request
      *
      * @return bool
      */
-    public static function https(): bool
+    private static function https(): bool
     {
         return ($_SERVER['HTTPS'] ?? '') === 'on';
     }
@@ -38,7 +38,7 @@ class Request
      *
      * @return bool
      */
-    public static function ajax(): bool
+    private static function ajax(): bool
     {
         return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
     }

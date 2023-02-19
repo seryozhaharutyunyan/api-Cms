@@ -3,7 +3,7 @@
  * list routes
  */
 
-$this->router->add('api', 'patch', '/', 'ApiController:index');
+$this->router->add('api', 'get', '/', 'ApiController:index');
 $this->router->add('login', "POST", '/login', 'AuthController:login');
 $this->router->add('registration', "POST", '/reg', 'AuthController:registration');
 $this->router->add('logout', 'get', '/logout/{id:int}', 'AuthController:logout', 'auth');

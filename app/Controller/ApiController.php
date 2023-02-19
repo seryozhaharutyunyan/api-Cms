@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\User\User;
 use App\Request\Home\StoreRequest;
+use Engine\Helper\Mail;
 use Engine\Helper\Store;
 
 class ApiController extends Controller
@@ -11,13 +12,9 @@ class ApiController extends Controller
     /**
      * @throws \Exception
      */
-    public function index(StoreRequest $request)
+    public function index()
     {
-        $data=$request->validate();
-
-        $phat=Store::saveFile('user', $data['file'][0]);
-
-        $this->response->setData($phat)->send();
+        echo Mail::send('admin@mai.ru', 'Hello', 'Password');
     }
 
     public function store()

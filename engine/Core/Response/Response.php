@@ -7,6 +7,7 @@ use Engine\Core\Config\Config;
 use Engine\Core\Router\Router;
 use Engine\DI\DI;
 use Engine\Helper\Request;
+use Engine\Helper\RequestHelper;
 
 class Response
 {
@@ -82,7 +83,7 @@ class Response
 
         $this->headersInit();
 
-        if (Request::is('ajax')) {
+        if (RequestHelper::is('ajax')) {
             echo json_encode($request);
         }
 

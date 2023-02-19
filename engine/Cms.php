@@ -33,13 +33,14 @@ class Cms
     {
         try {
             require_once __DIR__ . "/../routes/routes.php";
-            $this->auth();
-            $routerDispatch = $this->router->dispatch(Common::getMethod(), Common::getPathUrl());
+            if (Auth::authProtection()===409){
+                $this->response->send(409);
+            }
 
+            $routerDispatch = $this->router->dispatch(Common::getMethod(), Common::getPathUrl());
             if ($routerDispatch === null) {
                 $routerDispatch = new DispatchedRoute('ErrorController:page404');
             }
-
             if (str_starts_with($routerDispatch->get_controller(), 'Error')) {
                 $routerDispatch = new DispatchedRoute($routerDispatch->get_controller());
             }
@@ -88,26 +89,5 @@ class Cms
         }
 
         return $parameters;
-    }
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    private function auth(): void
-    {
-        if (Auth::authorized()) {
-            if (isset($_SERVER['HTTP_AUTHORIZATION']) && !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-                $this->response->send(401);
-                die;
-            }
-            $token = $matches[1] ?? false;
-            $user = new User(Auth::getUser());
-            if ($user->getToken() !== $token) {
-                Auth::deleteToken($user);
-            } else {
-                Auth::addToken($user);
-            }
-        }
     }
 }

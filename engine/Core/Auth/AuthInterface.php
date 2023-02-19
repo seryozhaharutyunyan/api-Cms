@@ -3,8 +3,10 @@
 namespace Engine\Core\Auth;
 
 use App\Model\User\User;
-use App\Request\LoginRequest;
-use App\Request\RegRequest;
+use App\Request\Auth\LoginRequest;
+use App\Request\Auth\RegistrationRequest;
+use App\Request\Auth\ResetRequest;
+use App\Request\Auth\UpdateRequest;
 
 interface AuthInterface
 {
@@ -12,9 +14,9 @@ interface AuthInterface
 
     public function logout(User $user);
 
-    public function registration(RegRequest $request);
+    public function registration(RegistrationRequest $request);
 
-    public function resetPassword();
+    public function resetPassword(ResetRequest $request);
 
-    public function update();
+    public function update(UpdateRequest $request);
 }
