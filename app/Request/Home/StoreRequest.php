@@ -9,7 +9,7 @@ class StoreRequest extends Request
     protected function validated(): array
     {
        return [
-           'name'=>'required|string',
+           'name'=>'nullable|string',
            'date'=>'nullable|date',
            'theme'=>'nullable|string',
            'file'=>'nullable|array|file'

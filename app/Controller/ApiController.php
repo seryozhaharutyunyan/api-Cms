@@ -4,18 +4,20 @@ namespace App\Controller;
 
 use App\Model\User\User;
 use App\Request\Home\StoreRequest;
-use Engine\Core\Auth\Auth;
-use Engine\Helper\Session;
+use Engine\Helper\Store;
 
 class ApiController extends Controller
 {
     /**
      * @throws \Exception
      */
-    public function index()
+    public function index(StoreRequest $request)
     {
-        var_dump($_SESSION);
-        //$this->response->setData($_SESSION)->send();
+        $data=$request->validate();
+
+        $phat=Store::saveFile('user', $data['file'][0]);
+
+        $this->response->setData($phat)->send();
     }
 
     public function store()
