@@ -109,7 +109,7 @@ class Auth
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @return string
      * @throws \Exception
      */

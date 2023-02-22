@@ -20,7 +20,6 @@ abstract class Controller
     protected QueryBuilder $query;
     protected Load $load;
     protected Response $response;
-    //protected View $view;
 
     /**
      * @param DI $di
@@ -32,7 +31,6 @@ abstract class Controller
         $this->config = $this->di->get('config');
         $this->load = $this->di->get('load');
         $this->response = $this->di->get('response');
-        //$this->view=$this->di->get('view');
 
         $this->initVars();
 

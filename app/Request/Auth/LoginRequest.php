@@ -10,7 +10,7 @@ class LoginRequest extends Request
     protected function validated(): array
     {
         return [
-            'email'=>'required|string|email|exist:user,email',
+            'email'=>'required|string|email|exist:users,email',
             'password'=>'required|string'
         ];
     }

@@ -49,4 +49,24 @@ class Store
         return false;
     }
 
+    /**
+     * @param string $dir
+     * @return array
+     */
+    public static function scanDir(string $dir): array
+    {
+        $files=scandir(ROOT_DIR.DS.$dir);
+        $nameArr=[];
+        foreach ($files as $file){
+            if($file==='.' || $file==='..'){
+                continue;
+            }
+            if(preg_match('/^([A-z_\-]+)\./', $file, $matches)){
+                $nameArr[]=$matches[1];
+
+            }
+        }
+        return $nameArr;
+    }
+
 }

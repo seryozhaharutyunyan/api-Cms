@@ -4,8 +4,8 @@
     "psr-4": {
       "Engine\\": "engine/",
       "App\\": "app/",
-      "Admin\\": "admin/",
-      "Content\\": "content/"
+      "Content\\": "content/",
+      "Migration\\": "migration/"
     }
   },
   "authors": [
@@ -16,6 +16,7 @@
   "require": {
     "ext-pdo": "*",
     "ext-mbstring": "*",
-    "phpmailer/phpmailer": "^6.7"
+    "phpmailer/phpmailer": "^6.7",
+    "guzzlehttp/guzzle": "^7.5"
   }
 }

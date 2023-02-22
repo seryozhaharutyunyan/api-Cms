@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Model\User\User;
 use App\Request\Home\StoreRequest;
+use Engine\Core\Migration\Migration;
+use Engine\Core\Migration\Migrations;
 use Engine\Helper\Mail;
 use Engine\Helper\Store;
+use Migration\users;
 
 class ApiController extends Controller
 {
@@ -14,7 +17,7 @@ class ApiController extends Controller
      */
     public function index()
     {
-        echo Mail::send('admin@mai.ru', 'Hello', 'Password');
+
     }
 
     public function store()
