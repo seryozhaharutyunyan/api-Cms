@@ -6,6 +6,7 @@ use Engine\Core\Migration\Migration;
 
 class Users extends Migration
 {
+    protected string $table='users';
 
     /**
      * @return void
@@ -26,6 +27,6 @@ class Users extends Migration
      */
     public function rollback(): void
     {
-        $this->dropTable();
+        $this->dropTable()->get();
     }
 }

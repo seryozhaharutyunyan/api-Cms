@@ -8,6 +8,7 @@ use Engine\Core\Migration\Migration;
 use Engine\Core\Migration\Migrations;
 use Engine\Helper\Mail;
 use Engine\Helper\Store;
+use Migration\User_add_ob_column;
 use Migration\users;
 
 class ApiController extends Controller
@@ -17,7 +18,8 @@ class ApiController extends Controller
      */
     public function index()
     {
-
+        $m= new User_add_ob_column();
+        $m->start();
     }
 
     public function store()

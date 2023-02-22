@@ -12,6 +12,7 @@ abstract class Migration
     protected string $table;
     protected string $prefix = '';
     protected string $create = '';
+    protected string $migrationName;
     protected Connection $db;
     protected QueryBuilder $queryBuilder;
 
@@ -19,13 +20,8 @@ abstract class Migration
     public function __construct()
     {
         $className = \explode('\\', \get_class($this));
-        $table = \strtolower($className[\count($className) - 1]);
-        if (preg_match('/(^[a-z_]+)(-[a-z_]+)/', $table, $matches)) {
-            $this->table = $matches[1];
-            $this->prefix = $matches[2];
-        } else {
-            $this->table = $table;
-        }
+        $migrationName = \strtolower($className[\count($className) - 1]);
+        $this->migrationName=$migrationName;
 
         $this->db = Connection::getInstance();
 

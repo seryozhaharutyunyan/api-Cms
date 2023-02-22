@@ -6,28 +6,37 @@ trait MigrationBuilder
 {
     protected function get(): void
     {
+        $flag=false;
         if ($this->table !== 'migrations') {
             $sql = $this->queryBuilder->select()
                 ->from('migrations')
                 ->sql();
             $migrations = $this->db->setAll($sql);
-
             if (str_starts_with($this->create, 'DROP TABLE')
                 || str_starts_with($this->create, 'DROP INDEX')
                 || preg_match('/^ALTER TABLE [a-z_]+ DROP COLUMN/', $this->create)) {
-                $sql = $this->queryBuilder->delete()
-                    ->from('migrations')
-                    ->where('name', $this->table . $this->prefix);
+                foreach ($migrations as $table) {
+                    if ($this->migrationName === $table->name) {
+                        $sql = $this->queryBuilder->delete()
+                            ->from('migrations')
+                            ->where('name', $this->migrationName)
+                            ->sql();
+                        $flag=true;
+                    }
+                }
+
             } else {
                 foreach ($migrations as $table) {
-                    if ($this->table === $table->name) {
+                    if ($this->migrationName === $table->name) {
                         return;
                     }
                 }
 
                 $sql = $this->queryBuilder->insert('migrations')
-                    ->set(['name' => $this->table . $this->prefix])
+                    ->set(['name' => $this->migrationName])
                     ->sql();
+
+                $flag=true;
             }
         }
 
@@ -36,13 +45,15 @@ trait MigrationBuilder
                 $this->create = \rtrim($this->create, ',') . '); ';
             }
         } else {
+            $this->create = \rtrim($this->create, ',');
             $this->create .= ';';
         }
 
-        $this->db->execute($this->create);
-        /** @var TYPE_NAME $sql */
-        if (isset($sql) && $this->table !== 'migrations') {
-            $this->db->execute($sql, $this->queryBuilder->values);
+        if($flag || $this->table==='migrations'){
+            $this->db->execute($this->create);
+            if (isset($sql) && $this->table !== 'migrations') {
+                $this->db->execute($sql, $this->queryBuilder->values);
+            }
         }
     }
 

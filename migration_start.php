@@ -31,6 +31,7 @@ if ($flag) {
 }
 
 $migrations=Store::scanDir('migration');
+ksort($migrations);
 
 foreach ($migrations as $migration){
     $m="\\Migration\\$migration";

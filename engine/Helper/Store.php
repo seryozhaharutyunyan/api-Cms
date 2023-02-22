@@ -62,8 +62,7 @@ class Store
                 continue;
             }
             if(preg_match('/^([A-z_\-]+)\./', $file, $matches)){
-                $nameArr[]=$matches[1];
-
+                $nameArr[filectime(ROOT_DIR.DS.$dir.DS.$file)]=$matches[1];
             }
         }
         return $nameArr;

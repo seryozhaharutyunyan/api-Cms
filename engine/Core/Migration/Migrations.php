@@ -4,6 +4,7 @@ namespace Engine\Core\Migration;
 
 class Migrations extends Migration
 {
+    protected string $table = 'migrations';
 
     public function start()
     {
