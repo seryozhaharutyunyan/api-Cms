@@ -16,7 +16,7 @@ class Store
     public static function saveFile(string $dirName, array $file): array
     {
         $path = ROOT_DIR . DS . "src\\store\\$dirName" . DS;
-        $url = Config::item('base_url') . "/src/store/$dirName/";
+        $url = Config::item('baseUrl') . "/src/store/$dirName/";
         if (!is_dir($path)) {
             mkdir($path);
         }

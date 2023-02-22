@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'headers' => [
-        'X-Requested-With',
-        'Authorization',
-        'Content-Type',
-    ],
-    'host'=>'http://localhost:8080'
+    'headers' => explode(',', $_ENV['headers']),
+    'host'=>$_ENV['corsHost']
 ];

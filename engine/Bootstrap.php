@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/Function.php';
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__.'../'));
+$dotenv->load();
 
 class_alias('Engine\Core\Config\Config', 'Config');
 class_alias('Engine\Helper\Session', 'Session');

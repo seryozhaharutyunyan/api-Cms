@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'base_url'=>'http://cms.my',
-    'defaultLang'=>'english',
-    'defaultTimezone'=>'America/Chicago',
-    'defaultTheme'=>'default',
-    'saveMethod'=>'session' // session || cookie
+    'baseUrl'=>$_ENV['baseUrl'],
+    'saveMethod'=>$_ENV['saveMethod']
 ];

@@ -18,7 +18,7 @@ class Provider extends AbstractProvider
      */
     public function init()
     {
-        $router = new Router(Config::item('base_url'));
+        $router = new Router(Config::item('baseUrl'));
         $this->di->set($this->serviceName, $router);
     }
 }

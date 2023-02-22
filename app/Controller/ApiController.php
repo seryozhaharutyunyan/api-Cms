@@ -18,8 +18,7 @@ class ApiController extends Controller
      */
     public function index()
     {
-        $m= new User_add_ob_column();
-        $m->start();
+       echo 'hello world';
     }
 
     public function store()

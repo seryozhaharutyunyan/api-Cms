@@ -80,7 +80,7 @@ function get_themes(): array
 {
     $themesPath = '../content/themes';
     $list = scandir($themesPath);
-    $baseUrl = Engine\Core\Config\Config::item('base_url');
+    $baseUrl = Engine\Core\Config\Config::item('baseUrl');
     $themes = [];
 
     if (!empty($list)) {

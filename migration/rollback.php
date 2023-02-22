@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/engine/MigrationBootstrap.php';
+require_once __DIR__ . '/../engine/MigrationBootstrap.php';
 
 use \Engine\Core\Database\Connection;
 use Engine\Core\Migration\Migrations;
@@ -12,8 +12,13 @@ $migrationName = fgets(STDIN);
 $migrationName=ucfirst(trim($migrationName));
 
 if($migrationName==='All'){
-    $migrations=Store::scanDir('migration');
+    $migrations=Store::scanDir('../migration');
     krsort($migrations);
+    foreach ($migrations as $key=>$migration){
+        if($migration==='start' || $migration==='rollback'){
+            unset($migrations[$key]);
+        }
+    }
 
     foreach ($migrations as $migration){
         $m="\\Migration\\$migration";

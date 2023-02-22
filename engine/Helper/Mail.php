@@ -50,7 +50,7 @@ class Mail
         }
 
         $mail->Username = $username;
-        $mail->setFrom($username, Config::item('base_url'));
+        $mail->setFrom($username, Config::item('baseUrl'));
         $mail->Subject = $subject;
         $mail->addAddress($email);
         $body = "<p>$message</p>";
