@@ -1,6 +1,6 @@
 <?php
 
-namespace Migration;
+namespace Migration\Classes;
 
 use Engine\Core\Migration\Migration;
 

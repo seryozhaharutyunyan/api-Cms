@@ -12,7 +12,7 @@ $migrationName = fgets(STDIN);
 $migrationName=ucfirst(trim($migrationName));
 
 if($migrationName==='All'){
-    $migrations=Store::scanDir('../migration');
+    $migrations=Store::scanDir('..\\migration\\Classes');
     krsort($migrations);
     foreach ($migrations as $key=>$migration){
         if($migration==='start' || $migration==='rollback'){
@@ -21,7 +21,7 @@ if($migrationName==='All'){
     }
 
     foreach ($migrations as $migration){
-        $m="\\Migration\\$migration";
+        $m="\\Migration\\Classes\\$migration";
         (new $m())->rollback();
     }
 

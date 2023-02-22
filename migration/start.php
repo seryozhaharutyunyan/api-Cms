@@ -22,16 +22,11 @@ if ($flag) {
     (new Migrations())->start();
 }
 
-$migrations=Store::scanDir('../migration');
+$migrations=Store::scanDir('..\\migration\\Classes');
 ksort($migrations);
-foreach ($migrations as $key=>$migration){
-    if($migration==='start' || $migration==='rollback'){
-        unset($migrations[$key]);
-    }
-}
 
 foreach ($migrations as $migration){
-    $m="Migration\\$migration";
+    $m="\\Migration\\Classes\\$migration";
     (new $m())->start();
 }
 
