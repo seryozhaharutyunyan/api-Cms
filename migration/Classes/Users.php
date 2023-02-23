@@ -16,7 +16,7 @@ class Users extends Migration
         $this->id()
             ->varchar('email')
             ->varchar('password')
-            ->enum('role', ['admin', 'user'])->defaultValue('admin')
+            ->enum('role', ['admin', 'user'])->defaultValue('user')
             ->text('token')->nullable()
             ->createAt()
             ->get();
