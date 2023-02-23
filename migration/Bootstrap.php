@@ -7,7 +7,7 @@ const DS=DIRECTORY_SEPARATOR;
 const ENV='App';
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/Function.php';
+require_once __DIR__ . '/../engine/Function.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__.'../'));
 $dotenv->load();
