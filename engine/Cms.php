@@ -46,7 +46,7 @@ class Cms
             }
 
             [$class, $action] = \explode(':', $routerDispatch->get_controller(), 2);
-            $controller = "\\" . ENV . "\\Controller\\" . $class;
+            $controller = "\\App\\Controller\\" . $class;
             if ($class === 'ErrorController') {
                 $controller = '\\Engine\\' . $class;
             }
@@ -74,10 +74,10 @@ class Cms
         $params = $r->getParameters();
         foreach ($params as $param) {
             $type = (string)$param->getType();
-            if (str_contains($type, ENV . '\\Request\\')) {
+            if (str_contains($type, 'App\\Request\\')) {
                 $types[] = new $type($this->di);
             }
-            if (str_contains($type, ENV . '\\Model\\') && isset($parameters['id'])) {
+            if (str_contains($type, 'App\\Model\\') && isset($parameters['id'])) {
                 $types[] = new $type($parameters['id']);
                 unset($parameters['id']);
             }

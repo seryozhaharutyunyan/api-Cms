@@ -2,15 +2,14 @@
 
 function path($section): string
 {
-    $phatMask = ROOT_DIR . DS . '%s';
+    $phatMask = ROOT_DIR . DS .'App'.DS. '%s';
+    $phatConfig = ROOT_DIR . DS .'engine'.DS. '%s';
 
-    if (ENV == 'App') {
-        $phatMask = ROOT_DIR . DS . strtolower(ENV) . DS . '%s';
-    }
 
     return match (strtolower($section)) {
         'controller' => sprintf($phatMask, 'Controller'),
-        'config' => sprintf($phatMask, 'Config'),
+        'config' => sprintf($phatConfig, 'Config'),
+        'messages' => ROOT_DIR . DS .'messages',
         'model' => sprintf($phatMask, 'Model'),
         'language' => sprintf($phatMask, 'Language'),
         default => ROOT_DIR,

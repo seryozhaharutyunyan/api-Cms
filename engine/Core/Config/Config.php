@@ -4,8 +4,6 @@ namespace Engine\Core\Config;
 
 class Config
 {
-
-
     /**
      * @param string $key
      * @param string $group
@@ -46,11 +44,8 @@ class Config
     {
         $path = path('config') . DS . $group . '.php';
 
-        if ($group=='database'){
-            $path='engine/Config/Database.php';
-            if (ENV=='Admin'){
-                $path='../engine/Config/Database.php';
-            }
+        if ($group === 'messages') {
+            $path = path('messages') . DS . $group . '_' . $_ENV['language'] . '.php';
         }
 
         if (file_exists($path)) {

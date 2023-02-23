@@ -4,6 +4,7 @@ namespace Engine;
 
 use App\Model\User\User;
 use Engine\Core\Auth\Auth;
+use Engine\Core\Config\Config;
 use Engine\Core\Database\Connection;
 use Engine\Core\Database\QueryBuilder;
 use Engine\Core\Mail\Mail;
@@ -35,6 +36,8 @@ abstract class Controller
         $this->initVars();
 
         $this->query = new QueryBuilder();
+
+        $this->receivingLanguage();
     }
 
     /**
@@ -62,6 +65,10 @@ abstract class Controller
         $this->get = $get;
     }
 
+    /**
+     * @param $key
+     * @return mixed|void
+     */
     protected function rout($key)
     {
         $routers = $this->di->get('router')->get_routes();
@@ -89,9 +96,14 @@ abstract class Controller
         return $this;
     }
 
-    protected function updateToken(int $id, string $token): string|null
+    /**
+     * @param User $user
+     * @param string $token
+     * @return string|null
+     * @throws \Exception
+     */
+    protected function updateToken(User $user, string $token): string|null
     {
-        $user = new User($id);
 
         if ($user->getToken() === $token) {
             $tokenNew = Auth::createToken();
@@ -106,5 +118,24 @@ abstract class Controller
         }
 
         return null;
+    }
+
+    private function receivingLanguage(): void
+    {
+        $sql = 'SHOW TABLES';
+        $tables = $this->db->setAll($sql, [], \PDO::FETCH_ASSOC);
+
+        foreach ($tables as $table) {
+            if ($table["Tables_in_" . Config::item('db_name', 'database')] === 'settings') {
+                $sql = $this->query->select()
+                    ->from('settings')
+                    ->sql();
+                $settings = $this->db->set($sql);
+            }
+        }
+
+        if (isset($settings) && isset($settings->language)) {
+            $_ENV['language'] = $settings->language;
+        }
     }
 }

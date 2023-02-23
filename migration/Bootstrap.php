@@ -2,14 +2,15 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-const ROOT_DIR=__DIR__;
-const DS=DIRECTORY_SEPARATOR;
-const ENV='App';
+define("ROOT_DIR", substr(__DIR__, 0, strrpos(__DIR__, '\\',)));
 
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../engine/Function.php';
+const DS = DIRECTORY_SEPARATOR;
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__.'../'));
+require_once ROOT_DIR . '/vendor/autoload.php';
+require_once ROOT_DIR . '/engine/Function.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__ . '../'));
 $dotenv->load();
+
 
 

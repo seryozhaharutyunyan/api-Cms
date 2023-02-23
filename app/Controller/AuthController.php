@@ -38,9 +38,13 @@ class AuthController extends Controller implements AuthInterface
 
     public function registration(RegistrationRequest $request)
     {
-        $date=$request->validate();
+        $data=$request->validate();
 
-        $this->response->setData($date)->send();
+        $user=new User();
+        $user->setEmail($data['email']);
+        $user->setPassword(Auth::encryptPassword($data['password']));
+        $user->save();
+        $this->response->setData($data)->send();
     }
 
     public function resetPassword(ResetRequest $request)

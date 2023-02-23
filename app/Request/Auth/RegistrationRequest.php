@@ -10,7 +10,7 @@ class RegistrationRequest extends Request
     protected function validated(): array
     {
         return [
-            'email'=>'required|string|unique:user',
+            'email'=>'required|string|unique:users',
             'password'=>'required|string|confirmation',
             'confirmation_password'=>'required|string',
         ];
