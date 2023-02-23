@@ -129,14 +129,11 @@ class QueryBuilder
         $this->sql['set'] = "SET ";
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                $this->sql['set'] .= "{$key} = ? ";
-                if (next($data)) {
-                    $this->sql['set'] .= ", ";
-                }
+                $this->sql['set'] .= "{$key} = ?,";
                 $this->values[] = $value;
             }
         }
-
+        $this->sql['set']=rtrim($this->sql['set'], ',').' ';
         return $this;
     }
 

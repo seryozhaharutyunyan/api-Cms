@@ -46,6 +46,9 @@ trait ActiveRecord
         foreach ($properties as $value) {
             foreach ($data as $key => $item) {
                 if ($value->getName() === $key) {
+                    if($i=strpos($key, '_')){
+                        $key=substr($key,0, $i).ucfirst(substr($key,$i+1));
+                    }
                     $this->{"set".ucfirst($key)}($item);
                 }
             }
@@ -111,6 +114,11 @@ trait ActiveRecord
             if (isset($this->{$property->getName()})) {
                 $properties[$property->getName()] = $this->{$property->getName()};
             }
+            if($this->{$property->getName()}===null){
+                $properties[$property->getName()]=null;
+            }
+
+
         }
 
         return $properties;

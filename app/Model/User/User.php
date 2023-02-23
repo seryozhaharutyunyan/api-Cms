@@ -95,7 +95,7 @@ class User
     /**
      * @return string
      */
-    public function getCreate_at(): string
+    public function getCreateAt(): string
     {
         return $this->create_at;
     }
@@ -103,7 +103,7 @@ class User
     /**
      * @param string $create_at
      */
-    public function setCreate_at(string $create_at): void
+    public function setCreateAt(string $create_at): void
     {
         $this->create_at = $create_at;
     }
