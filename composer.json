@@ -5,7 +5,8 @@
       "Engine\\": "engine/",
       "App\\": "app/",
       "Content\\": "content/",
-      "Migration\\": "migration/"
+      "Migration\\": "migration/",
+      "Bin\\": "bin"
     }
   },
   "authors": [

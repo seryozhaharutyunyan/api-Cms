@@ -53,6 +53,10 @@ class ComposerStaticInitf4fe6d81479e1cf28d3c02161716bf80
         array (
             'Content\\' => 8,
         ),
+        'B' => 
+        array (
+            'Bin\\' => 4,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -120,6 +124,10 @@ class ComposerStaticInitf4fe6d81479e1cf28d3c02161716bf80
         'Content\\' => 
         array (
             0 => __DIR__ . '/../..' . '/content',
+        ),
+        'Bin\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/bin',
         ),
         'App\\' => 
         array (

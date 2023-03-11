@@ -21,5 +21,6 @@ return array(
     'Engine\\' => array($baseDir . '/engine'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Content\\' => array($baseDir . '/content'),
+    'Bin\\' => array($baseDir . '/bin'),
     'App\\' => array($baseDir . '/app'),
 );

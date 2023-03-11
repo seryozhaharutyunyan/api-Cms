@@ -1,0 +1,5 @@
+socket server start run php bin/SocketServer.php
+
+migration sratrt run php migration/start.php
+
+migration rollback run php migration/rollback.php parametor all || migration name
